@@ -1,6 +1,6 @@
 # Cactus Pi Service
 
-A backend service to be consumed by the [CactusPI Server](https://github.com/dannielum/cactuspi-server).
+A backend service to be consumed by [CactusPI Server](https://github.com/dannielum/cactuspi-server) and [CactusPI Serverless](https://github.com/dannielum/cactuspi-serverless).
 
 ## Services
 
