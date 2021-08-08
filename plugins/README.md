@@ -61,16 +61,21 @@ Please use [plugin-template](./plugin-template) as reference.
 ### Message Metadata
 
 ```js
-return new Promise((resolve, reject) => {
+fetch(callback, errorCallback, req) {
   // your plugin logic here
+  if (error) {
+    // error handling
+    return errorCallback(error);
+  }
   
-  resolve(message, {
+  // callback to return your plugin message
+  callback(message, {
     repeat: false,
     name: 'apiName',
     duration: 30,
     priority: false,
   });
-});
+}
 ```
 
 | Field      | Value                                                 |

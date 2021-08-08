@@ -7,43 +7,30 @@ module.exports = class Weather {
 
   init() {}
 
-  fetch(req, res) {
+  fetch(callback, errorCallback, req) {
     const { functionName, symbol: defaultSymbol, apikey } = this._config;
     const symbol = req.params.param || defaultSymbol;
 
     const url = `https://www.alphavantage.co/query?function=${functionName}&symbol=${symbol}&apikey=${apikey}`;
 
-    return new Promise((resolve, reject) => {
-      request(url, (error, response, body) => {
-        if (error) {
-          return reject({
-            name: 'Plugin Error: alphavantage',
-            error,
-          });
-        }
+    request(url, (error, response, body) => {
+      if (error) {
+        return errorCallback(error);
+      }
 
-        const results = JSON.parse(body);
+      const results = JSON.parse(body);
 
-        if (results['Error Message']) {
-          return reject({
-            name: 'Plugin Error: alphavantage',
-            error: results['Error Message'],
-          });
-        }
+      if (results['Error Message']) {
+        return errorCallback(results['Error Message']);
+      }
 
-        const message = this.parseMessage(functionName, results);
+      const message = this.parseMessage(functionName, results);
 
-        res.send(message);
-
-        return resolve({
-          message,
-          metadata: {
-            repeat: false,
-            name: 'alphavantage',
-            duration: 35,
-            priority: false,
-          },
-        });
+      callback(message, {
+        repeat: false,
+        name: 'alphavantage',
+        duration: 35,
+        priority: false,
       });
     });
   }

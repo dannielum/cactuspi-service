@@ -43,9 +43,22 @@ pluginServices.forEach(({ name, service, options }) => {
   }
 
   // register the end poins for each plugin
-  app.get(`/${name}/:param?`, async (req, res) => {
-    const { message, metadata } = await plugin.fetch(req, res);
-    publisher.publish(message, metadata);
+  app.get(`/${name}/:param?`, (req, res) => {
+    plugin.fetch(
+      (message, metadata) => {
+        publisher.publish(message, metadata);
+
+        res.status(200);
+        res.send({ message, metadata });
+      },
+      (error) => {
+        res.status(500);
+        res.send({
+          name: `Plugin Error: ${name}`,
+          error,
+        });
+      }
+    );
   });
 });
 ```

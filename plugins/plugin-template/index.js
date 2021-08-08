@@ -15,24 +15,22 @@ module.exports = class Weather {
     // do init works
   }
 
-  fetch(req, res) {
+  fetch(callback, errorCallback, req) {
     // do fetch work
-    return new Promise((resolve, reject) => {
-      request(this._url, (error, response, body) => {
-        if (error) {
-          reject({ name: 'Plugin Error: plugin-name', error });
-        }
+    const param = req.params.param; // get query params
 
-        const message = JSON.parse(body);
+    request(this._url, (error, response, body) => {
+      if (error) {
+        errorCallback(error);
+      }
 
-        res.send(message);
+      const message = JSON.parse(body);
 
-        resolve(message, {
-          repeat: false, // whether this message will loop in the cactuspi-client
-          name: 'api-name', // name of your api
-          duration: 35, // number of seconds to run
-          priority: false, // display immediate or push to queue
-        });
+      callback(message, {
+        repeat: false, // whether this message will loop in the cactuspi-client
+        name: 'api-name', // name of your api
+        duration: 35, // number of seconds to run
+        priority: false, // display immediate or push to queue
       });
     });
   }
