@@ -24,10 +24,10 @@ module.exports = class SQSPublisher {
         },
       },
       MessageBody: message,
-      QueueUrl: config.sqs.topic,
+      QueueUrl: this._topic,
     };
 
-    sqs.sendMessage(params, function (error, data) {
+    this.sqs.sendMessage(params, function (error, data) {
       if (error) {
         console.error('SQS', error);
       } else {
