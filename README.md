@@ -5,6 +5,7 @@ A backend service to be consumed by [CactusPI Server](https://github.com/danniel
 ## Services
 
 - Publisher
+  - AWS SQS
   - PubNub
   - MQTT (Home Assistant)
 

@@ -25,7 +25,7 @@ module.exports = class PubNubPublisher {
         meta
       }, (status, response) => {
         if (status.error) {
-          console.log('PubNub', status)
+          console.error('PubNub', status)
         } else {
           console.log('PubNub: Published with timetoken', response.timetoken)
         }

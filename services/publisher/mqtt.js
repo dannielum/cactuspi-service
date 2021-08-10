@@ -19,7 +19,9 @@ module.exports = class MQTTPublisher {
 
     this._mqtt.publish(this._config.topic, stringifyMessage, {}, (error) => {
       if (error) {
-        console.log('MQTT', error);
+        console.error('MQTT', error);
+      } else {
+        console.log('MQTT: Published');
       }
     });
   }
