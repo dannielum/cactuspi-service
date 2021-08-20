@@ -1,4 +1,4 @@
-import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
+const { SQSClient, SendMessageCommand } = require('@aws-sdk/client-sqs');
 
 module.exports = class SQSPublisher {
   constructor(config) {
@@ -24,7 +24,7 @@ module.exports = class SQSPublisher {
     };
 
     try {
-      const data = await sqsClient.send(new SendMessageCommand(params));
+      const data = await this.sqs.send(new SendMessageCommand(params));
       console.log('SQS: Published with MessageId', data.MessageId);
     } catch (err) {
       console.error('SQS', error);
