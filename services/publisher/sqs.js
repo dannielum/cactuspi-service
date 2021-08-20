@@ -1,17 +1,13 @@
-const AWS = require('aws-sdk');
+import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
 
 module.exports = class SQSPublisher {
   constructor(config) {
-    AWS.config.update({
-      region: config.region,
-    });
-
-    this.sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
+    this.sqs = new SQSClient({ region: config.region });
 
     this._topic = config.topic;
   }
 
-  publish(message, meta) {
+  async publish(message, meta) {
     if (!this.sqs) {
       throw new Error('SQS is not initialized');
     }
@@ -27,12 +23,11 @@ module.exports = class SQSPublisher {
       QueueUrl: this._topic,
     };
 
-    this.sqs.sendMessage(params, function (error, data) {
-      if (error) {
-        console.error('SQS', error);
-      } else {
-        console.log('SQS: Published with MessageId', data.MessageId);
-      }
-    });
+    try {
+      const data = await sqsClient.send(new SendMessageCommand(params));
+      console.log('SQS: Published with MessageId', data.MessageId);
+    } catch (err) {
+      console.error('SQS', error);
+    }
   }
 };
